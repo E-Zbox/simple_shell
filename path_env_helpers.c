@@ -10,7 +10,7 @@
 char **break_path(char *path)
 {
 char **token;
-int i , p_len;
+int i, p_len;
 i = 0;
 if (!path)
 {
