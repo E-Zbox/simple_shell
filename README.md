@@ -92,7 +92,7 @@ $
 
 ## AUTHORS
 
-**Ononogbu Ebenezer**
+Ononogbu Ebenezer
 
-**Adetunji Adebowale**
+Adetunji Adebowale
 
