@@ -33,7 +33,7 @@ break;
 }
 i++;
 }
-value = "tmp";
+value = "";
 value = alloc_char(value, (_strlen(e_var) - (len)));
 i = 0;
 len += 1;

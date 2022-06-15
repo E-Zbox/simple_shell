@@ -7,7 +7,7 @@
 #include <string.h>
 #include <signal.h>
 int _strlen(char *str);
-char **alloc_char_mem(int len, char *str);
+char **alloc_char_mem(int len);
 void free_char_mem(char **buff);
 int _getline(char **av, char **env);
 char **break_cmd(char **arg_mem, char *command);

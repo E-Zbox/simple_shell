@@ -48,21 +48,20 @@ argv[0] = path;
 }
 else
 {
+free_char(line, path, value, cmd);
+free_char_mem(argv);
 perror(av[0]);
-exit(98);
+exit(1);
 }
 }
 exec_stat = execute(argv, av, env);
-if (exec_stat)
+if (exec_stat < 0)
 {
 free_char(line, path, value, cmd);
-free_char_mem(argv);
 free_char_mem(path_dirs);
 }
 write(1, "($) ", 4);
-}
-free_char(line, path, value, cmd);
 free_char_mem(argv);
-free_char_mem(path_dirs);
+}
 return (0);
 }

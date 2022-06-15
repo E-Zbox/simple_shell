@@ -17,12 +17,14 @@ child_pid = fork();
 if (child_pid < 0)
 {
 perror("Error");
-exit(1);
+free_char_mem(argv);
+return (-1);
 }
 if (child_pid == 0)
 {
 if (execve(argv[0], argv, env) == -1)
 {
+free_char_mem(argv);
 perror(av[0]);
 return (-1);
 }
@@ -73,6 +75,7 @@ ex = "exit\n";
 if (line[0] == '\n')
 {
 free(cmd_buf);
+free(line);
 exit(-1);
 }
 for (i = 0; line[i]; i++)
@@ -89,6 +92,7 @@ stop = 0;
 if (stop)
 {
 free(cmd_buf);
+free(line);
 exit(-1);
 }
 cmd_buf = alloc_char(line, (_strlen(line) + 1));
@@ -96,7 +100,7 @@ for (i = 0, j = _strlen(line); j > 0; j--, i++)
 {
 cmd_buf[i] = line[i];
 }
-argv = alloc_char_mem(_strlen(cmd_buf), cmd_buf);
+argv = alloc_char_mem(_strlen(cmd_buf));
 argv = break_cmd(argv, cmd_buf);
 return (argv);
 }

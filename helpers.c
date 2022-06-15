@@ -21,22 +21,17 @@ return (i);
 
 /**
  * alloc_char_mem - alloc mem for arr of str
- * @str: The string to alloc
- * @len: the length of str
+ * @len: the length to alloc
  *
  * Return: a pointer to the new arr.
  */
 
-char **alloc_char_mem(int len, char *str)
+char **alloc_char_mem(int len)
 {
 int i, size;
 char **arr;
 
-if (str == NULL)
-{
-return (NULL);
-}
-size = sizeof(*arr) * len;
+size = sizeof(char) * len;
 arr = malloc(size);
 if (arr == NULL)
 {
@@ -44,7 +39,7 @@ return (NULL);
 }
 for (i = 0; i < len; i++)
 {
-arr[i] = malloc(sizeof(char) * len);
+arr[i] = malloc(sizeof(char));
 if (arr[i] == NULL)
 {
 while (i >= 0)
@@ -56,6 +51,7 @@ free(arr);
 return (NULL);
 }
 }
+
 return (arr);
 }
 

@@ -10,13 +10,14 @@
 char **break_path(char *path)
 {
 char **token;
-int i = 0, p_len;
+int i , p_len;
+i = 0;
 if (!path)
 {
 return (NULL);
 }
 p_len = _strlen(path);
-token = alloc_char_mem(p_len, path);
+token = alloc_char_mem(p_len);
 token[0] = strtok(path, ":");
 while (token[i])
 {
@@ -79,5 +80,7 @@ if (ok_f == 0 && ok_x == 0)
 return (path_buf);
 }
 }
+free(path_buf);
+free(dir_arr);
 return (NULL);
 }
