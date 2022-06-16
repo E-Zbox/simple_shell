@@ -1,5 +1,5 @@
-#ifndef MAIN_H
-#define MAIN_H
+#ifndef SHELL_H
+#define SHELL_H
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -20,4 +20,4 @@ char *check_dir_permission(char **dir_arr, char *command);
 char *concat_arg(char *path, char *cmd, char *buff);
 char **manage_line(char *line, char *cmd_buf);
 void free_char(char *line, char *path, char *value, char *cmd);
-#endif /* MAIN_H */
+#endif /* SHELL_H */
