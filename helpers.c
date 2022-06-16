@@ -12,68 +12,13 @@ int _strlen(char *str)
 int i;
 
 i = 0;
-while (str[i] != '\0' && str[i] != '\n')
+while (str[i] != '\0')
 {
 i++;
 }
 return (i);
 }
 
-/**
- * alloc_char_mem - alloc mem for arr of str
- * @len: the length to alloc
- *
- * Return: a pointer to the new arr.
- */
-
-char **alloc_char_mem(int len)
-{
-int i, size;
-char **arr;
-
-size = sizeof(char) * len;
-arr = malloc(size);
-if (arr == NULL)
-{
-return (NULL);
-}
-for (i = 0; i < len; i++)
-{
-arr[i] = malloc(sizeof(char));
-if (arr[i] == NULL)
-{
-while (i >= 0)
-{
-free(arr[i]);
-i--;
-}
-free(arr);
-return (NULL);
-}
-}
-
-return (arr);
-}
-
-
-/**
- * alloc_char - alloc mem for a pointer to string
- * @str: The string to alloc
- * @len: the length of str
- *
- * Return: a pointer to the new mem.
- */
-char *alloc_char(char *str, int len)
-{
-str = malloc(sizeof(char) * len);
-if (str == NULL)
-{
-free(str);
-perror("malloc error");
-return (NULL);
-}
-return (str);
-}
 
 /**
  * free_char_mem - frees a malloc'd buff
@@ -91,19 +36,32 @@ free(buff[i]);
 }
 free(buff);
 }
+
 /**
- * free_char - frees malloc'd char strings
- * @line: a buffer
- * @path: path buffer
- * @value: buffer
- * @cmd: command buff
+ * _strdup - duplicates a string
+ * @str: The str to duplicate
  *
- * Return: nothing
+ * Return: pointer to the new str
  */
-void free_char(char *line, char *path, char *value, char *cmd)
+
+char *_strdup(char *str)
 {
-free(line);
-free(path);
-free(value);
-free(cmd);
+int i, len;
+char *s;
+if (str == NULL)
+{
+return (NULL);
+}
+len = _strlen(str);
+s = malloc(len + 1 * sizeof(char));
+if (s == NULL)
+{
+return (NULL);
+}
+for (i = 0; i < len; i++)
+{
+s[i] = str[i];
+}
+s[i] = '\0';
+return (s);
 }

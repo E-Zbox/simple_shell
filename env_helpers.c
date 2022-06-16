@@ -17,7 +17,9 @@ len = _strlen(name);
 while (env[i])
 {
 v_len = _strlen(env[i]);
-e_var = alloc_char(e_var, len);
+e_var = malloc(sizeof(char) * len);
+if (e_var == NULL)
+return (NULL);
 for (j = 0; v_len > 0; j++, v_len--)
 {
 if (env[i][j] == name[j])
@@ -33,8 +35,9 @@ break;
 }
 i++;
 }
-value = "";
-value = alloc_char(value, (_strlen(e_var) - (len)));
+value = malloc(sizeof(char) * (_strlen(e_var) - (len - 1)));
+if (value == NULL)
+return (NULL);
 i = 0;
 len += 1;
 while (e_var[i])
@@ -56,7 +59,7 @@ int check_env(char *cmd)
 {
 char *command;
 int i, envs = 1;
-command = "/bin/";
+command = "/";
 for (i = 0; command[i]; i++)
 {
 if (command[i] == cmd[i])

@@ -17,7 +17,9 @@ if (!path)
 return (NULL);
 }
 p_len = _strlen(path);
-token = alloc_char_mem(p_len);
+token = malloc(sizeof(char *) * p_len);
+if (token == NULL)
+return (NULL);
 token[0] = strtok(path, ":");
 while (token[i])
 {
@@ -32,27 +34,29 @@ return (token);
  * concat_arg - concats path with command
  * @path: the path arg
  * @cmd: the command to add
- * @buff: the buff to concat into
  *
  * Return: a pointer to the buff
  */
-char *concat_arg(char *path, char *cmd, char *buff)
+char *concat_arg(char *path, char *cmd)
 {
 int i, j;
-
+char *path_buff;
 i = 0;
+path_buff = malloc(sizeof(char) * (_strlen(path) + _strlen(cmd) + 1));
+if (path_buff == NULL)
+return (NULL);
 while (path[i])
 {
-buff[i] = path[i];
+path_buff[i] = path[i];
 i++;
 }
-buff[i] = '/';
+path_buff[i] = '/';
 i += 1;
 for (j = 0; cmd[j]; j++, i++)
 {
-buff[i] = cmd[j];
+path_buff[i] = cmd[j];
 }
-return (buff);
+return (path_buff);
 }
 
 
@@ -66,17 +70,16 @@ return (buff);
 char *check_dir_permission(char **dir_arr, char *command)
 {
 char *path_buf;
-int i, dir_len, cmd_len, ok_f = 0, ok_x = 0;
-cmd_len = _strlen(command);
+int i, ok_f = 0, ok_x = 0;
+
 for (i = 0; dir_arr[i]; i++)
 {
-dir_len = _strlen(dir_arr[i]);
-path_buf = alloc_char(path_buf, (cmd_len + dir_len + 1));
-path_buf = concat_arg(dir_arr[i], command, path_buf);
+path_buf = concat_arg(dir_arr[i], command);
 ok_f = access(path_buf, F_OK);
 ok_x = access(path_buf, X_OK);
-if (ok_f == 0 && ok_x == 0)
+if (ok_f == 0)
 {
+if (ok_x == 0)
 return (path_buf);
 }
 }

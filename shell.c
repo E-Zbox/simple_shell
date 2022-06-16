@@ -10,12 +10,15 @@
  */
 int main(int ac, char *av[], char **env)
 {
-int resp;
+int is_term = isatty(0);
 (void)ac;
-write(1, "($) ", 4);
-resp = _getline(av, env);
-
-return (resp);
+while (1)
+{
+if (is_term)
+write(STDOUT_FILENO, "k_shell$ ", 9);
+_getline(av, env);
+}
+return (0);
 }
 
 /**
@@ -27,41 +30,42 @@ return (resp);
  */
 int _getline(char **av, char **env)
 {
-int read, envs, exec_stat;
+int envs, exec_stat;
+ssize_t byts_read;
 size_t len;
-char *line, **argv, **path_dirs, *value, *path, *cmd;
+char *line, **argv, **path_dirs, *value, *path;
+int exitcode = 0;
 len = 0, line = NULL;
-cmd = "tmp";
-while ((read = getline(&line, &len, stdin) != -1))
+byts_read = getline(&line, &len, stdin);
+if (byts_read == -1)
 {
-cmd = alloc_char(line, _strlen(line));
-argv = manage_line(line, cmd);
+free(line);
+exit(exitcode);
+}
+argv = manage_line(line);
 envs = check_env(argv[0]);
-if (envs)
-{
 value = _getenv("PATH", env);
 path_dirs = break_path(value);
 path = check_dir_permission(path_dirs, argv[0]);
+if (envs)
+{
 if (path != NULL)
 {
 argv[0] = path;
 }
 else
 {
-free_char(line, path, value, cmd);
+cmd_error(av[0], argv[0]);
+free(value);
+free(line);
 free_char_mem(argv);
-perror(av[0]);
-exit(1);
+exitcode = 126;
+exit(exitcode);
 }
 }
-exec_stat = execute(argv, av, env);
-if (exec_stat < 0)
-{
-free_char(line, path, value, cmd);
-free_char_mem(path_dirs);
-}
-write(1, "($) ", 4);
-free_char_mem(argv);
-}
-return (0);
+exec_stat = execute(argv, av, env, path_dirs);
+free(path);
+free(value);
+free(line);
+return (exec_stat);
 }
