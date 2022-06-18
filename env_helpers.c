@@ -10,42 +10,22 @@
  */
 char *_getenv(char *name, char **env)
 {
-int i, j, len, v_len;
-char *value, *e_var;
+int i, compare;
+char *e_var, *token, *value;
 i = 0;
-len = _strlen(name);
 while (env[i])
 {
-v_len = _strlen(env[i]);
-e_var = malloc(sizeof(char) * len);
-if (e_var == NULL)
-return (NULL);
-for (j = 0; v_len > 0; j++, v_len--)
+compare = _strcmp(env[i], name);
+if ((compare == 0))
 {
-if (env[i][j] == name[j])
-{
-e_var[j] = env[i][j];
+e_var = _strdup(env[i]);
+token = strtok(e_var, "=");
+token = strtok(NULL, "=");
+value = _strdup(token);
 }
+i++;
 }
-if (_strlen(e_var) == len)
-{
 free(e_var);
-e_var = env[i];
-break;
-}
-i++;
-}
-value = malloc(sizeof(char) * (_strlen(e_var) - (len - 1)));
-if (value == NULL)
-return (NULL);
-i = 0;
-len += 1;
-while (e_var[i])
-{
-value[i] = e_var[len];
-len++;
-i++;
-}
 return (value);
 }
 

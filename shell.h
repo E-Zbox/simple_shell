@@ -7,12 +7,13 @@
 #include <string.h>
 #include <signal.h>
 int _strlen(char *str);
+int _strcmp(char *s1, char *s2);
 char *_strdup(char *str);
 char **alloc_char_mem(int len);
 void free_char_mem(char **buff);
 int _getline(char **av, char **env);
 char **break_cmd(char *command);
-int execute(char **argv, char **av, char **env, char **path_dirs);
+int execute(char **argv, char **av, char **env);
 int check_env(char *cmd);
 char *_getenv(char *name, char **env);
 char **break_path(char *path);

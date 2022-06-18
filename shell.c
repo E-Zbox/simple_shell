@@ -8,15 +8,19 @@
  *
  * Return: Always 0
  */
-int main(int ac, char *av[], char **env)
+int main(int ac, char **av, char **env)
 {
-int is_term = isatty(0);
+int  status, is_term = isatty(0);
 (void)ac;
+signal(SIGINT, SIG_IGN);
+
 while (1)
 {
 if (is_term)
 write(STDOUT_FILENO, "k_shell$ ", 9);
-_getline(av, env);
+status = _getline(av, env);
+if (status < 0)
+continue;
 }
 return (0);
 }
@@ -43,6 +47,8 @@ free(line);
 exit(exitcode);
 }
 argv = manage_line(line);
+if (argv == NULL)
+return (-1);
 envs = check_env(argv[0]);
 value = _getenv("PATH", env);
 path_dirs = break_path(value);
@@ -56,16 +62,14 @@ argv[0] = path;
 else
 {
 cmd_error(av[0], argv[0]);
-free(value);
-free(line);
 free_char_mem(argv);
+free(value);
 exitcode = 126;
 exit(exitcode);
 }
 }
-exec_stat = execute(argv, av, env, path_dirs);
-free(path);
+exec_stat = execute(argv, av, env);
 free(value);
-free(line);
+free(path);
 return (exec_stat);
 }

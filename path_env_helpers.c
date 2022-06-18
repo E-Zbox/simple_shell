@@ -39,10 +39,11 @@ return (token);
  */
 char *concat_arg(char *path, char *cmd)
 {
-int i, j;
+int i, j, total_len;
 char *path_buff;
 i = 0;
-path_buff = malloc(sizeof(char) * (_strlen(path) + _strlen(cmd) + 1));
+total_len = _strlen(path) + _strlen(cmd);
+path_buff = malloc(sizeof(char) * (_strlen(path) + _strlen(cmd) + 2));
 if (path_buff == NULL)
 return (NULL);
 while (path[i])
@@ -56,6 +57,7 @@ for (j = 0; cmd[j]; j++, i++)
 {
 path_buff[i] = cmd[j];
 }
+path_buff[total_len + 1] = '\0';
 return (path_buff);
 }
 
@@ -80,10 +82,11 @@ ok_x = access(path_buf, X_OK);
 if (ok_f == 0)
 {
 if (ok_x == 0)
+{
 return (path_buf);
 }
 }
+}
 free(path_buf);
-free(dir_arr);
 return (NULL);
 }

@@ -9,14 +9,13 @@
 
 int _strlen(char *str)
 {
-int i;
+int len = 0;
 
-i = 0;
-while (str[i] != '\0')
+while (str[len] != '\0')
 {
-i++;
+len++;
 }
-return (i);
+return (len);
 }
 
 
@@ -28,7 +27,7 @@ return (i);
  */
 void free_char_mem(char **buff)
 {
-unsigned int i;
+size_t i;
 
 for (i = 0; buff[i]; i++)
 {
@@ -64,4 +63,30 @@ s[i] = str[i];
 }
 s[i] = '\0';
 return (s);
+}
+
+
+/**
+ * _strcmp - compares two strings
+ *
+ * @s1: the first str,
+ * @s2: the second str.
+ *
+ * Return: an int based on comparism.
+ */
+int _strcmp(char *s1, char *s2)
+{
+int i;
+i = 0;
+while (s1[i] != '\0' && s2[i] != '\0')
+{
+if (s1[i] < s2[i])
+{
+return (s1[i] - s2[i]);
+}
+else if (s1[i] > s2[i])
+return (s1[i] - s2[i]);
+i++;
+}
+return (0);
 }
