@@ -10,66 +10,80 @@
  */
 int main(int ac, char **av, char **env)
 {
-int  status, is_term = isatty(0);
+ssize_t byts_read;
+size_t len;
+int status,  envs, is_term = isatty(0);
+char *line, **argv;
 (void)ac;
-signal(SIGINT, SIG_IGN);
-
+len = 0, line = NULL;
 while (1)
 {
 if (is_term)
 write(STDOUT_FILENO, "k_shell$ ", 9);
-status = _getline(av, env);
-if (status < 0)
-continue;
-}
-return (0);
-}
-
-/**
- * _getline - get a line from stdin and set it to a command
- * @av: the arg vector
- * @env: the env variables
- *
- * Return: 0 on succes, -1 on error
- */
-int _getline(char **av, char **env)
-{
-int envs, exec_stat;
-ssize_t byts_read;
-size_t len;
-char *line, **argv, **path_dirs, *value, *path;
-int exitcode = 0;
-len = 0, line = NULL;
 byts_read = getline(&line, &len, stdin);
 if (byts_read == -1)
 {
 free(line);
-exit(exitcode);
+exit(0);
 }
 argv = manage_line(line);
 if (argv == NULL)
-return (-1);
+continue;
+if (_strcmp(argv[0], "env") == 0)
+{
+print_env(env);
+continue;
+}
 envs = check_env(argv[0]);
+status = handle_path(envs, argv, av, env);
+if (status == -1)
+{
+free(line);
+exit(0);
+}
+execute(argv, av, env);
+free_char_mem(argv);
+}
+free(line);
+return (0);
+}
+
+/**
+ * handle_path - handles the path directories
+ * @argv: the cmd and arg array
+ * @env_s: the user input status
+ * @av: arg vector
+ * @env:array of env vars
+ *
+ * Return: 0 on succes, -1 on error
+ */
+int handle_path(int env_s, char **argv, char **av, char **env)
+{
+char **path_dirs, *value, *path;
+if (env_s == 1)
+{
 value = _getenv("PATH", env);
 path_dirs = break_path(value);
 path = check_dir_permission(path_dirs, argv[0]);
-if (envs)
-{
 if (path != NULL)
 {
+if (_strcmp("no access", path) == 0)
+{
+perm_error(av[0], argv[0]);
+free_char_mem(argv);
+free(path);
+return (-1);
+}
+free(argv[0]);
 argv[0] = path;
 }
 else
 {
 cmd_error(av[0], argv[0]);
 free_char_mem(argv);
-free(value);
-exitcode = 126;
-exit(exitcode);
-}
-}
-exec_stat = execute(argv, av, env);
-free(value);
 free(path);
-return (exec_stat);
+return (-1);
+}
+}
+return (0);
 }

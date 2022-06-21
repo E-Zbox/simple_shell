@@ -30,26 +30,38 @@ return (value);
 }
 
 /**
- * check_env - checks if user enter env arg
+ * check_env - checks if user enter path command
  * @cmd:  the command
  *
  * Return: 1 on true, 0 otherwise
  */
 int check_env(char *cmd)
 {
-char *command;
-int i, envs = 1;
-command = "/";
-for (i = 0; command[i]; i++)
+char *path;
+int compare;
+path = "/";
+compare = _strcmp(cmd, path);
+if (compare == 0)
 {
-if (command[i] == cmd[i])
+return (0);
+}
+return (1);
+}
+
+
+/**
+ * print_env - prints current env bars
+ * @env:  array of env vars
+ *
+ * Return: nothing
+ */
+void print_env(char **env)
 {
-envs = 0;
-}
-if (i == _strlen(cmd))
+int i = 0;
+while (env[i])
 {
-break;
+write(STDOUT_FILENO, env[i], _strlen(env[i]));
+write(STDOUT_FILENO, "\n", 1);
+i++;
 }
-}
-return (envs);
 }

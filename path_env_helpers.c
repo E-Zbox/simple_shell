@@ -9,24 +9,29 @@
 
 char **break_path(char *path)
 {
-char **token;
-int i, p_len;
+char *token, *path_copy;
+char **path_dirs;
+int i, path_count;
+path_count = get_path_count(path);
+path_dirs = malloc(sizeof(char *) * (path_count + 1));
+if (path_dirs == NULL)
+{
+free(path);
+return (NULL);
+}
+path_copy = _strdup(path);
+token = strtok(path_copy, ":");
 i = 0;
-if (!path)
+while (i < path_count)
 {
-return (NULL);
-}
-p_len = _strlen(path);
-token = malloc(sizeof(char *) * p_len);
-if (token == NULL)
-return (NULL);
-token[0] = strtok(path, ":");
-while (token[i])
-{
+path_dirs[i] = _strdup(token);
 i++;
-token[i] = strtok(NULL, ":");
+token = strtok(NULL, ":");
 }
-return (token);
+path_dirs[path_count] = NULL;
+free(path);
+free(path_copy);
+return (path_dirs);
 }
 
 
@@ -83,10 +88,40 @@ if (ok_f == 0)
 {
 if (ok_x == 0)
 {
+free_char_mem(dir_arr);
 return (path_buf);
 }
+else
+{
+free_char_mem(dir_arr);
+free(path_buf);
+return ("no access");
 }
 }
 free(path_buf);
+}
+free_char_mem(dir_arr);
 return (NULL);
+}
+
+/**
+ * get_path_count - gets nums of dir in path env var
+ * @path: the path env to count
+ *
+ * Return: the nums of dir
+*/
+int get_path_count(char *path)
+{
+int i, count;
+i = 0;
+count = 0;
+while (path[i] != '\0')
+{
+if (path[i] == ':')
+{
+count++;
+}
+i++;
+}
+return (count);
 }

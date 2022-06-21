@@ -24,13 +24,13 @@ if (child_pid == 0)
 if (execve(argv[0], argv, env) == -1)
 {
 perror(av[0]);
+return (-1);
 }
 }
 else
 {
 wait(&status);
 }
-
 return (0);
 }
 
@@ -45,22 +45,22 @@ return (0);
 char **break_cmd(char *command)
 {
 int i;
+char *token;
 char **argv;
 argv = malloc(sizeof(char *) * _strlen(command) + 1);
 if (argv == NULL)
 {
-free(command);
 return (NULL);
 }
-argv[0] = _strdup(command);
-argv[0] = strtok(argv[0], " ");
+token = strtok(command, " ");
+argv[0] = _strdup(token);
 i = 0;
 while (argv[i] != NULL)
 {
 i++;
-argv[i] = strtok(NULL, " ");
+token = strtok(NULL, " ");
+argv[i] = _strdup(token);
 }
-free(command);
 argv[i] = NULL;
 return (argv);
 }
@@ -79,18 +79,39 @@ int stop;
 ex = "exit";
 if (line[0] == '\n')
 {
-free(line);
 return (NULL);
 }
 stop = _strcmp(ex, line);
 if (stop == 0)
 {
 free(line);
-exit(127);
+exit(0);
 }
-cmd_buff = _strdup(line);
-cmd_buff = strtok(cmd_buff, "\n");
+cmd_buff = strtok(line, "\n");
 argv = break_cmd(cmd_buff);
-free(line);
+if (_strcmp("env", cmd_buff) == 0)
+{
+argv[0] = "env";
+}
 return (argv);
+}
+
+/**
+ * get_cmd_len - count the len of cmd
+ * @cmd: the imputed command
+ *
+ * Return: the length of command
+ */
+int get_cmd_len(char *cmd)
+{
+int count, i = 0;
+while (cmd[i])
+{
+if (cmd[i] != ' ')
+{
+count++;
+}
+i++;
+}
+return (count);
 }

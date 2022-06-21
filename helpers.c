@@ -52,7 +52,7 @@ if (str == NULL)
 return (NULL);
 }
 len = _strlen(str);
-s = malloc(len + 1 * sizeof(char));
+s = malloc(sizeof(char) * (len + 1));
 if (s == NULL)
 {
 return (NULL);

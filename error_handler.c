@@ -16,13 +16,13 @@ write(STDERR_FILENO, ": not found\n", 12);
 }
 
 /**
- * perm_err - prints error when user does not have perm
+ * perm_error - prints error when user does not have perm
  * @name: the name of the program
  * @cmd: the command not granted
  *
  * Return: nothing
  */
-void perm_err(char *name, char *cmd)
+void perm_error(char *name, char *cmd)
 {
 write(STDERR_FILENO, name, _strlen(name));
 write(STDERR_FILENO, ": ", 2);
