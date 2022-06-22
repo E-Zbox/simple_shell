@@ -77,7 +77,7 @@ char *ex, *cmd_buff;
 char **argv;
 int stop;
 ex = "exit";
-if (line[0] == '\n')
+if (line[0] == '\n' || line[0] == ' ')
 {
 return (NULL);
 }

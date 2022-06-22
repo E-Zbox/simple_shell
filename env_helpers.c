@@ -10,15 +10,21 @@
  */
 char *_getenv(char *name, char **env)
 {
-int i, compare;
+int i, len, compare = 1;
 char *e_var, *token, *value;
 i = 0;
+len = _strlen(name);
 while (env[i])
 {
 compare = _strcmp(env[i], name);
 if ((compare == 0))
 {
 e_var = _strdup(env[i]);
+if (_strlen(e_var) == (len + 1))
+{
+free(e_var);
+return (NULL);
+}
 token = strtok(e_var, "=");
 token = strtok(NULL, "=");
 value = _strdup(token);
@@ -37,11 +43,10 @@ return (value);
  */
 int check_env(char *cmd)
 {
-char *path;
-int compare;
-path = "/";
-compare = _strcmp(cmd, path);
-if (compare == 0)
+int compare1, compare2;
+compare1 = _strcmp(cmd, "/");
+compare2 = _strcmp(cmd, ".");
+if (compare1 == 0 || compare2 == 0)
 {
 return (0);
 }

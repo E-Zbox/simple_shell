@@ -14,6 +14,7 @@ ssize_t byts_read;
 size_t len;
 int status,  envs, is_term = isatty(0);
 char *line, **argv;
+signal(SIGINT, SIG_IGN);
 (void)ac;
 len = 0, line = NULL;
 while (1)
@@ -63,6 +64,12 @@ char **path_dirs, *value, *path;
 if (env_s == 1)
 {
 value = _getenv("PATH", env);
+if (value == NULL)
+{
+cmd_error(av[0], argv[0]);
+free_char_mem(argv);
+return (-1);
+}
 path_dirs = break_path(value);
 path = check_dir_permission(path_dirs, argv[0]);
 if (path != NULL)
